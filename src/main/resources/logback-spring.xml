@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration scan="true">
+   <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!-- Console -->
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />    
+
+    <property name="LOG_PATH" value="logs"/>
+    <!-- File -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/Update-100K-into-10M.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>365</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>3MB</MaxFileSize>
+             </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    
+    <!-- File error only -->
+    <appender name="FILE-ERROR-ONLY" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_PATH}/update-100K-into-10M.error</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+    
+    <logger name="com.blogspot.koacervate" level="INFO" additivity="false">
+        <appender-ref ref="FILE-ERROR-ONLY" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+    
+    <root level="INFO">
+        <appender-ref ref="FILE-ERROR-ONLY" />
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+
+	<logger name="com.blogspot.koacervate" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+    <root level="WARN">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>
