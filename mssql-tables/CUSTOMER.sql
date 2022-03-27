@@ -7,3 +7,10 @@ IF NOT EXISTS (SELECT * FROM SYSOBJECTS WHERE NAME='CUSTOMER' AND XTYPE='U')
 		COUNTRY varchar(100) NULL,
 		APP_INSTALL bit default 0 NULL
 	);
+
+DECLARE @i int = 0
+WHILE @i < 10500000 
+BEGIN
+    SET @i = @i + 1
+    INSERT INTO CUSTOMER (ID, FIRST_NAME, LAST_NAME, EMAIL, COUNTRY, APP_INSTALL) VALUES(@i, 'First Name', 'Last Name', 'email@email.com', 'Singapore', 0);
+END
